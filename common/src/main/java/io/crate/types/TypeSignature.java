@@ -132,7 +132,13 @@ public class TypeSignature {
             var builder = ObjectType.builder();
             for (int i = 0; i < parameters.size() - 1;) {
                 var valTypeSignature = parameters.get(i + 1);
-                builder.setInnerType(String.valueOf(i), valTypeSignature.createType());
+                final String innerTypeName;
+                if (valTypeSignature instanceof NamedTypeSignature) {
+                    innerTypeName = ((NamedTypeSignature) valTypeSignature).parameterName();
+                } else {
+                    innerTypeName = String.valueOf(i);
+                }
+                builder.setInnerType(innerTypeName, valTypeSignature.createType());
                 i += 2;
             }
             return builder.build();
