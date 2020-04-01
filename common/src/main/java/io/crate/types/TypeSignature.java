@@ -132,13 +132,9 @@ public class TypeSignature {
             var builder = ObjectType.builder();
             for (int i = 0; i < parameters.size() - 1;) {
                 var valTypeSignature = parameters.get(i + 1);
-                final String innerTypeName;
-                if (valTypeSignature instanceof ObjectParameterTypeSignature) {
-                    innerTypeName = ((ObjectParameterTypeSignature) valTypeSignature).parameterName();
-                } else {
-                    // so the parseSignature(..).createType is still possible
-                    innerTypeName = String.valueOf(i);
-                }
+                assert valTypeSignature instanceof ObjectParameterTypeSignature
+                    : "the inner type signature must be named (must have ObjectParameterTypeSignature type)";
+                var innerTypeName = ((ObjectParameterTypeSignature) valTypeSignature).parameterName();
                 builder.setInnerType(innerTypeName, valTypeSignature.createType());
                 i += 2;
             }
