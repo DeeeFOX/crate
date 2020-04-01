@@ -22,39 +22,17 @@
 
 package io.crate.types;
 
-import java.util.Objects;
-
-class NamedTypeSignature extends TypeSignature {
+final class ObjectParameterTypeSignature extends TypeSignature {
 
     private final String parameterName;
 
-    public NamedTypeSignature(String parameterName,
-                              TypeSignature typeSignature) {
+    public ObjectParameterTypeSignature(String parameterName,
+                                        TypeSignature typeSignature) {
         super(typeSignature.getBaseTypeName(), typeSignature.getParameters());
         this.parameterName = parameterName;
     }
 
     public String parameterName() {
         return parameterName;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        NamedTypeSignature that = (NamedTypeSignature) o;
-        return Objects.equals(parameterName, that.parameterName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), parameterName);
     }
 }

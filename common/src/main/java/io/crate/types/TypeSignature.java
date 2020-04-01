@@ -133,9 +133,10 @@ public class TypeSignature {
             for (int i = 0; i < parameters.size() - 1;) {
                 var valTypeSignature = parameters.get(i + 1);
                 final String innerTypeName;
-                if (valTypeSignature instanceof NamedTypeSignature) {
-                    innerTypeName = ((NamedTypeSignature) valTypeSignature).parameterName();
+                if (valTypeSignature instanceof ObjectParameterTypeSignature) {
+                    innerTypeName = ((ObjectParameterTypeSignature) valTypeSignature).parameterName();
                 } else {
+                    // so the parseSignature(..).createType is still possible
                     innerTypeName = String.valueOf(i);
                 }
                 builder.setInnerType(innerTypeName, valTypeSignature.createType());
@@ -166,7 +167,8 @@ public class TypeSignature {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null ||
+            !(getClass() == o.getClass() || getClass() == ObjectParameterTypeSignature.class)) {
             return false;
         }
         TypeSignature that = (TypeSignature) o;

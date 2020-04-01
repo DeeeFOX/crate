@@ -24,8 +24,6 @@ package io.crate.metadata.functions;
 
 import io.crate.test.integration.CrateUnitTest;
 import io.crate.types.DataType;
-import io.crate.types.DataTypes;
-import io.crate.types.ObjectType;
 import io.crate.types.TypeSignature;
 import org.junit.Test;
 
@@ -241,9 +239,7 @@ public class SignatureBinderTest extends CrateUnitTest {
             .build();
 
         assertThat(getValueFunction)
-            .boundTo(
-                ObjectType.builder().setInnerType("0", DataTypes.LONG).build(),
-                DataTypes.STRING)
+            .boundTo("object(text, bigint)", "text")
             .produces(new BoundVariables(
                 Map.of(
                     "K", type("text"),
@@ -450,17 +446,17 @@ public class SignatureBinderTest extends CrateUnitTest {
         public BindSignatureAssertion boundTo(List<Object> arguments) {
             ArrayList<TypeSignature> builder = new ArrayList<>(arguments.size());
             for (Object argument : arguments) {
-                if (argument instanceof DataType<?>) {
-                    builder.add(((DataType<?>) argument).getTypeSignature());
-                } else if (argument instanceof String) {
+                if (argument instanceof String) {
                     builder.add(TypeSignature.parseTypeSignature((String) argument));
-                } else if (argument instanceof TypeSignature) {
-                    builder.add((TypeSignature) argument);
-                } else {
-                    throw new IllegalArgumentException(format(
-                        "argument is of type %s. It should be DataType, String or TypeSignature",
-                        argument.getClass()));
+                    continue;
                 }
+                if (argument instanceof TypeSignature) {
+                    builder.add((TypeSignature) argument);
+                    continue;
+                }
+                throw new IllegalArgumentException(format(
+                    "argument is of type %s. It should be String or TypeSignature",
+                    argument.getClass()));
             }
             this.argumentTypes = Collections.unmodifiableList(builder);
             return this;

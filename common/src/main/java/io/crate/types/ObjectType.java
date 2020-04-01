@@ -267,7 +267,7 @@ public class ObjectType extends DataType<Map<String, Object>> implements Streame
 
             var innerType = innerTypeKeyValue.getValue();
             parameters.add(
-                new NamedTypeSignature(innerTypeKeyValue.getKey(), innerType.getTypeSignature()));
+                new ObjectParameterTypeSignature(innerTypeKeyValue.getKey(), innerType.getTypeSignature()));
         }
         return new TypeSignature(NAME, parameters);
     }
