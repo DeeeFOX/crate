@@ -243,7 +243,8 @@ public class SignatureBinderTest extends CrateUnitTest {
         assertThat(getValueFunction)
             .boundTo(
                 ObjectType.builder()
-                    .setInnerType("V", DataTypes.LONG).build(), DataTypes.STRING)
+                    .setInnerType("V", DataTypes.LONG).build(),
+                DataTypes.STRING)
             .produces(new BoundVariables(
                 Map.of(
                     "K", type("text"),
@@ -253,7 +254,8 @@ public class SignatureBinderTest extends CrateUnitTest {
         assertThat(getValueFunction)
             .boundTo(
                 ObjectType.builder()
-                    .setInnerType("V", DataTypes.LONG).build(), DataTypes.LONG)
+                    .setInnerType("V", DataTypes.LONG).build(),
+                DataTypes.LONG)
             .withoutCoercion()
             .fails();
     }
